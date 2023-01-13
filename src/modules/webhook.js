@@ -1,18 +1,20 @@
-const serverless = require('serverless-http');
-const express = require('express');
+module.exports = async function webhook(req) {
+  const mytoken = process.env.TOKEN;
 
-const app = express();
+  console.log('entrou aqui');
+  const mode = req.query['hub.mode'];
+  const challange = req.query['hub.challenge'];
+  const token = req.query['hub.verify_token'];
+  if (mode && token) {
+    console.log('entrou no if do get /webhook');
 
-const token = process.env.WEBHOOK_TOKEN;
-
-app.get('/webhooks', (req, res) => {
-  if (
-    req.query['hub.mode'] == 'subscribe' &&
-    req.query['hub.verify_token'] == token
-  ) {
-    res.send(req.query['hub.challenge']);
-  } else {
-    res.sendStatus(400);
+    if (mode === 'subscribe' && token === mytoken) {
+      console.log('status 200 do get /webhook');
+      // return res.status(200).send(challange, 'hello');
+      return challange;
+    }
+    console.log('status 403 do get /webhook');
+    return 'Acess denied';
   }
-});
-module.exports.handler = serverless(app);
+  return 'nenhum webhook enviado';
+};
