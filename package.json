@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./src/index.js localhost 3000",
+    "start": "node ./src/index.js",
+    "nodemon": "nodemon ./src/index.js localhost 3000",
     "lint": "eslint './src/*.js' --fix",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write"
   },
